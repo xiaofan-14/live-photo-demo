@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { ref, useTemplateRef } from 'vue'
-
 interface Props {
   imgSrc: string
   videoSrc: string
@@ -17,9 +15,6 @@ const hasInteracted = ref(false)
 function initInteraction() {
   hasInteracted.value = true
 }
-
-document.addEventListener('touchstart', initInteraction, { once: true })
-document.addEventListener('mousedown', initInteraction, { once: true })
 
 function startVideo() {
   if (!isTouch.value && hasInteracted.value) {
@@ -67,12 +62,14 @@ function hideVideo() {
     videoRef.value.style.display = 'none'
   }
 }
+document.addEventListener('click', initInteraction, { once: true });
 </script>
 
 <template>
   <div relative mt-1 class="container">
+    <Icon @mouseenter="startVideo" @mouseleave="cancelVideo" />
     <img
-      :src="imgSrc" alt="cover" hfull wfull @mouseenter="startVideo" @mouseleave="cancelVideo"
+      :src="imgSrc" alt="cover" hfull wfull
       @touchstart.prevent="handleTouchStart" @touchend.prevent="handleTouchEnd"
     >
     <video ref="videoRef" :src="videoSrc" style="display: none;" absolute left-0 top-0 hfull wfull @ended="hideVideo" />
